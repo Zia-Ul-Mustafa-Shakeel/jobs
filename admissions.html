@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admissions and Jos</title>
+  <style>
+    
+    /* ==========================================================================
+       1. CSS Variables & Neumorphic Design Tokens
+       ========================================================================== */
+    :root {
+      --bg-base: #e0e5ec;
+      --shadow-dark: #a3b1c6;
+      --shadow-light: #ffffff;
+      --text-heading: #2d3748;
+      --text-body: #4a5568;
+      --text-muted: #718096;
+      --accent-primary: #4f46e5;
+      --accent-primary-hover: #4338ca;
+      --accent-whatsapp: #1ebe5d;
+      --accent-danger: #c53030;
+      --radius-lg: 22px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    /* ==========================================================================
+       2. Reset & Base Page Layout
+       ========================================================================== */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-body);
+      font-family: var(--font-stack);
+      line-height: 1.55;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3.5rem;
+    }
+
+    /* ==========================================================================
+       3. Neumorphic Welcome Header Card
+       ========================================================================== */
+    .welcome-card {
+      background-color: var(--bg-base);
+      border-radius: var(--radius-lg);
+      box-shadow: 9px 9px 18px var(--shadow-dark), -9px -9px 18px var(--shadow-light);
+      padding: 2rem 2.25rem;
+      margin-bottom: 2.25rem;
+    }
+
+    .header-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .welcome-content {
+      max-width: 820px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      background-color: var(--bg-base);
+      box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--accent-primary);
+      margin-bottom: 0.85rem;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #10b981;
+    }
+
+    .welcome-title {
+      font-size: clamp(1.4rem, 5vw, 2.4rem);
+      font-weight: 800;
+      color: var(--text-heading);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.65rem;
+    }
+
+    .welcome-title span {
+      color: var(--accent-primary);
+    }
+
+    .welcome-note {
+      font-size: 0.8rem;
+      color: var(--text-body);
+    }
+
+    .stats-pill {
+      background-color: var(--bg-base);
+      border-radius: var(--radius-md);
+      box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
+      padding: 1rem 1.75rem;
+      text-align: center;
+      min-width: 165px;
+    }
+
+    .stats-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+    }
+
+    .stats-number {
+      display: block;
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: var(--accent-primary);
+      line-height: 1.2;
+      margin: 0.2rem 0;
+    }
+
+    /* ==========================================================================
+       4. Responsive Neumorphic Table & Individual Row Styling
+       ========================================================================== */
+    .table-hint {
+      display: none;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-align: right;
+      margin-bottom: 0.5rem;
+      padding-right: 0.5rem;
+    }
+
+    @media (max-width: 1180px) {
+      .table-hint {
+        display: block;
+      }
+    }
+
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      padding: 0.5rem 0.75rem 1.5rem;
+    }
+
+    .neu-table {
+      width: 100%;
+      min-width: 1180px;
+      border-collapse: separate;
+      border-spacing: 0 16px;
+      text-align: left;
+    }
+
+    /* Individual Neumorphic Card Styling for EVERY Table Row (tr) */
+    .neu-table thead tr,
+    .neu-table tbody tr {
+      background-color: var(--bg-base);
+      border-radius: var(--radius-md);
+      box-shadow: 7px 7px 14px var(--shadow-dark), -7px -7px 14px var(--shadow-light);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .neu-table tbody tr.populated-row:hover {
+      transform: translateY(-2px);
+      box-shadow: 9px 9px 18px var(--shadow-dark), -9px -9px 18px var(--shadow-light);
+    }
+
+    /* Ensure rounded corners render cleanly across separate table cells */
+    .neu-table th:first-child,
+    .neu-table td:first-child {
+      border-top-left-radius: var(--radius-md);
+      border-bottom-left-radius: var(--radius-md);
+    }
+
+    .neu-table th:last-child,
+    .neu-table td:last-child {
+      border-top-right-radius: var(--radius-md);
+      border-bottom-right-radius: var(--radius-md);
+    }
+
+    .neu-table th {
+      padding: 1.05rem 1rem;
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      color: var(--text-heading);
+      white-space: nowrap;
+      text-wrap: wrap;      
+    }
+
+    .neu-table th:first-child,
+    .neu-table td:first-child {
+      padding-left: 1.35rem;
+    }
+
+    .neu-table th:last-child,
+    .neu-table td:last-child {
+      padding-right: 1.35rem;
+    }
+
+    .neu-table td {
+      padding: 1.15rem 1rem;
+      font-size: 0.7rem;
+      vertical-align: top;
+      color: var(--text-body);
+    }
+
+    /* Column Width Distribution */
+    .col-org { width: 20%; }
+    .col-title { width: 5%; }
+    .col-qual { width: 30%; }
+    .col-exp { width: 25%; }
+    .col-age { width: 10%; }
+    .col-req { width: 15%; }
+    .col-date { width: 5%; }
+    .col-share { width: 10%; font-weight: 500; }
+    .col-source { width: 5%; }
+
+    /* Cell Typography & Badges */
+    .org-name {
+      font-weight: 700;
+      color: var(--text-heading);
+      display: block;
+    }
+
+    .org-location {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+      display: block;
+    }
+
+    .job-title {
+      font-weight: 600;
+      color: var(--accent-primary);
+      text-wrap: wrap;
+    }
+
+    .inset-pill {
+      display: inline-block;
+      padding: 0.3rem 0.7rem;
+      border-radius: var(--radius-sm);
+      background-color: var(--bg-base);
+      box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-heading);
+      white-space: nowrap;
+    }
+
+    .date-pill {
+      color: var(--accent-danger);
+    }
+
+    .req-text {
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    /* ==========================================================================
+       5. Neumorphic Action Buttons (WhatsApp Share & Source Links)
+       ========================================================================== */
+    .neu-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.55rem 0.85rem;
+      border-radius: var(--radius-sm);
+      background-color: var(--bg-base);
+      box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+
+    .neu-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .neu-btn:active {
+      box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
+      transform: translateY(0);
+    }
+
+    .btn-whatsapp {
+      color: var(--accent-whatsapp);
+    }
+
+    .btn-whatsapp:hover {
+      color: #169c4b;
+    }
+
+    .btn-source {
+      color: var(--text-heading);
+    }
+
+    .btn-source:hover {
+      color: var(--accent-primary);
+    }
+
+    .wa-icon {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+
+    /* ==========================================================================
+       6. Empty Placeholder Rows (Maintains Individual Row Neumorphic Styling)
+       ========================================================================== */
+    .neu-table tbody tr.empty-row {
+      height: 64px;
+    }
+
+    .neu-table tbody tr.empty-row td {
+      vertical-align: middle;
+      color: #a0aec0;
+      font-weight: 600;
+      user-select: none;
+    }
+
+    /* ==========================================================================
+       7. Footer
+       ========================================================================== */
+    .portal-footer {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 640px) {
+      .welcome-card {
+        padding: 1.5rem;
+      }
+      .stats-pill {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Welcoming Header Card -->
+    <header class="welcome-card">
+      <div class="header-top">
+        <div class="welcome-content">
+          <div class="status-badge">
+            <span class="status-dot"></span>
+            <!-- Verified Career Opportunities • Updated Daily -->
+          </div>
+          <h1 class="welcome-title">Welcome to <span>Admissions Portal</span></h1>
+          <p class="welcome-note">
+            <!-- Disclaimer: While every effort has been made to ensure that the job listings, deadlines, and eligibility details presented on this page are accurate and up to date, all information is provided for general informational purposes only. Applicants are strongly advised to independently verify all requirements, closing dates, and application procedures directly through the official website or published advertisement of the respective institute or organization before applying. -->
+          </p>
+        </div>
+
+        <div class="stats-pill"><span class="stats-label">
+            <!-- Total Job Listings -->
+          </span>
+          <span class="stats-number">
+            <!-- 07 -->
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Job Table Section -->
+    <main>
+      <p class="table-hint">Swipe horizontally to view all columns &rarr;</p>
+
+      <div class="table-wrapper">
+        <table class="neu-table">
+          <thead>
+            <tr>
+              <th scope="col" class="col-org">college/university</th>
+              <th scope="col" class="col-title">program</th>
+              <th scope="col" class="col-qual">degree tittle</th>
+              <th scope="col" class="col-exp">eligibility</th>
+              <th scope="col" class="col-age">admission criteria</th>
+              <th scope="col" class="col-req">admission test date</th>
+              <th scope="col" class="col-share"></th>
+              <th scope="col" class="col-date">last date to apply</th>
+              <th scope="col" class="col-source">apply online</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <!-- JOB ANNOUNCEMENT -->
+            <tr class="populated-row">
+              <td><span class="org-name">
+                University of Karachi
+                  </span>
+                  <span class="org-location">
+                Karachi
+                  </span>
+              </td>
+              <td class="job-title">
+                BS
+              </td>
+              <td class="job-title">
+                <ul>
+                  <li>Actuarial Sciences and Risk Management</li>
+                  <li>Agriculture</li>
+                  <li>Applied Chemistry and Chemical Technology</li>
+                  <li>Applied Physics</li>
+                  <li>Audiology and Speech Language Pathology</li>
+                  <li>Business Administration (BBA)</li>
+                  <li>Biotechnology</li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                </ul>
+              </td>
+              <td>
+                Intermediate and/or<br>12 Years of Education
+              </td>
+              <td><span class="inset-pill">
+                5 Years
+              </span></td>
+              <td>
+                28-50 Years
+              </td>
+              <td class="req-text">
+                HTV Driving Licence
+              </td>
+              <td class="col-share">
+                Required for Romania
+              </td>
+              <td><span class="inset-pill date-pill">
+                -----
+              </span></td>
+              <td>
+                <a href="https://www.express.com.pk/epaper/PoPupwindow.aspx?newsID=1112780324&Issue=NP_LHE&Date=20261120" target="_blank"
+                  rel="noopener noreferrer" class="neu-btn btn-source">
+                  Website &nearr;
+                </a>
+              </td>
+            </tr>
+
+            
+
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="portal-footer">
+      <p>CareerNexus Job Portal • Soft Neumorphic UI • Pure HTML &amp; CSS</p>
+    </footer>
+  </div>
+</body>
+
+</html>
